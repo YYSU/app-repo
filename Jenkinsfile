@@ -6,10 +6,10 @@ pipeline {
         stage('Get Source') {
             steps {
                 echo "1.Clone Repo Stage"
-                git credentialsId: 'github', url: 'https://github.com/<your github>/gitops-app'
+                git credentialsId: 'Github', url: 'https://github.com/YYSU/app-repo'
                 script {
                     build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
-                    repo_name = '<your account ID>.dkr.ecr.cn-north-1.amazonaws.com.cn'
+                    repo_name = '624482679723.dkr.ecr.ap-northeast-1.amazonaws.com'
                     app_name = 'gitops-app-demo'
                 }
             }
@@ -25,7 +25,7 @@ pipeline {
         stage('Push Image') {
             steps {
                 echo "3.Push Docker Image Stage"
-                withDockerRegistry(credentialsId: 'ecr:cn-north-1:ecr-repo', url: 'https://<your account ID>.dkr.ecr.cn-north-1.amazonaws.com.cn/gitops-app') {
+                withDockerRegistry(credentialsId: 'ecr:cn-north-1:ecr-repo', url: 'https://624482679723.dkr.ecr.ap-northeast-1.amazonaws.com/gitops-app-demo') {
                     sh "docker push ${repo_name}/${app_name}:latest"
                     sh "docker push ${repo_name}/${app_name}:${build_tag}"
                 }
